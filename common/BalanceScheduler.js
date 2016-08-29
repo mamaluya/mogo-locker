@@ -27,7 +27,7 @@ function init() {
                   if (renter.phone) {
                     console.log(renter.phone);
                     console.log("tpl_value: " + depart.balance);
-                    SMSUtil.sendSMS(renter.phone, config.sms.balance, "#money#=" + depart.balance, function (data) {
+                    SMSUtil.sendSMS(renter.phone, config.sms.balance, "#balance#=" + depart.balance, function (data) {
                       console.log(data);
                     });
                   }
