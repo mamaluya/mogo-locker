@@ -1,0 +1,40 @@
+﻿extends ../layout
+
+block content
+  body(class="#{me.settings.layoutOption == 'boxed' ? 'page-boxed ' : ''}#{me.settings.headerOption == 'fixed' ? 'page-header-fixed ' : ''}#{me.settings.sidebarOption == 'fixed' ? 'page-sidebar-fixed ' : ''}#{me.settings.footerOption == 'fixed' ? 'page-footer-fixed ' : ''}#{me.settings.sidebar ? me.settings.sidebar : ''}")
+    // BEGIN HEADER
+    include ../body-header
+    // END HEADER
+    // BEGIN CONTAINER
+    if me.settings.layoutOption == 'boxed'
+      .container
+        .page-container.row-fluid
+          // BEGIN SIDEBAR
+          include ../body-sidebar
+          // END SIDEBAR
+          // BEGIN PAGE
+          include settings_log_content
+          // END PAGE
+        // END CONTAINER
+        include ../body-footer
+    else
+      .page-container.row-fluid
+        // BEGIN SIDEBAR
+        include ../body-sidebar
+        // END SIDEBAR
+        // BEGIN PAGE
+        include settings_log_content
+        // END PAGE
+      // END CONTAINER
+      // BEGIN FOOTER
+      include ../body-footer
+      // END FOOTER
+    // BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time)
+    script(src='../javascript/app.js')
+    script.
+      jQuery(document).ready(function () {
+        // initiate layout and plugins
+        App.init();
+
+      });
+    // END JAVASCRIPTS

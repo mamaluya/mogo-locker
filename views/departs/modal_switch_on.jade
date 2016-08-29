@@ -1,0 +1,9 @@
+.modal#switch_on_modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-body(style="padding: 8%;")
+        .row-fluid
+          i.icon-warning-sign.big(style="color: brown")   确认为 #{depart.building_num}号楼  #{depart.room_num}室开闸送电吗?
+      .modal-footer
+        .btn(data-dismiss='modal') 取消
+        .btn.red(onclick="switchOn();") 确认

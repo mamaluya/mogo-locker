@@ -1,0 +1,37 @@
+.page-content
+  // BEGIN PAGE CONTAINER
+  .container-fluid
+    // BEGIN PAGE HEADER
+    .row-fluid
+      .span12
+        // BEGIN PAGE TITLE & BREADCRUMB
+          h3.page-title
+            | 公寓管理
+            small --公寓一览
+        // END PAGE TITLE & BREADCRUMB
+        .portlet.box(class="#{me.settings.color}")
+          .portlet-title
+            .caption
+              i.icon-reorder
+              | #{depart.building_num}号楼#{depart.room_num}室
+          .portlet-body
+            .row-fluid
+              .tiles
+                each renter in depart.renters
+                  .tile(id="tile_#{renter._id}" class="#{renter.departs.length?'bg-green':'bg-grey'}")
+                    .tile-body
+                      i(class="#{renter.gender?'icon-male':'icon-female'}")
+                    .tile-object
+                      .name #{renter.nickname}
+                      .number #{renter.phone}
+                    input(name="_id" value="#{renter._id}")
+                input#hidden_id(type="hidden" value="#{depart._id}")
+            .row-fluid
+              .form-actions
+                .span1
+                button.btn.blue(type='button' onclick="addRenter();")
+                  i.icon-plus
+                  |  添加人员
+                button.btn(type='button' onclick='javascript:window.location.href="/departs/list?building_num=#{depart.building_num}&floor_num=#{depart.floor_num}";')
+                  i.icon-undo
+                  |  返回

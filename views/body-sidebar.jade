@@ -1,0 +1,53 @@
+.page-sidebar.nav-collapse.collapse
+  // BEGIN SIDEBAR MENU
+  ul.page-sidebar-menu
+    li
+      // BEGIN SIDEBAR TOGGLER BUTTON
+      .sidebar-toggler.hidden-phone
+      // BEGIN SIDEBAR TOGGLER BUTTON
+    li(style="margin: 10px;")
+    li#homepage.start
+      a(href='/index')
+        i.icon-home
+        span.title 首页
+        span.selected
+    li#apartment
+      a(href='javascript:;')
+        i.icon-table
+        span.title 公寓管理
+        span.selected
+        span.arrow
+      ul.sub-menu
+        li#appartment_add
+          a(href='/departs/add')
+            | 添加公寓
+        li#appartment_list
+          a(href='/departs/list')
+            | 公寓检索
+    li#user
+      a(href='javascript:;')
+        i.icon-user
+        span.title 用户管理
+        span.selected
+        span.arrow
+      ul.sub-menu
+        li#user_add
+          a(href='/renters/add')
+            | 添加用户
+        li#user_list
+          a(href='/renters/list')
+            | 用户检索
+    li#settings
+      a(href='javascript:;')
+        i.icon-cogs
+        span.title 参数设置
+        span.selected
+        span.arrow
+      ul.sub-menu
+        li#settings_rate
+          a(href='/settings/info')
+            | 水电单价
+        li#settings_log
+          a(href='/settings/log')
+            | 系统日志
+  // END SIDEBAR MENU

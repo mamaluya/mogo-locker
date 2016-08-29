@@ -1,0 +1,79 @@
+.page-content
+  // BEGIN PAGE CONTAINER
+  .container-fluid
+    // BEGIN PAGE HEADER
+    .row-fluid
+      .span12
+        // BEGIN PAGE TITLE & BREADCRUMB
+          h3.page-title
+            | 公寓管理
+            small --添加公寓
+        // END PAGE TITLE & BREADCRUMB
+        .portlet.box.tabbable(class="#{me.settings.color}")
+          .portlet-title
+            .caption
+              i.icon-reorder
+              | #{depart.building_num}号楼#{depart.room_num}室
+          .portlet-body
+            .tabbable.portlet-tabs
+              ul.nav.nav-tabs
+                li
+                  a(href='#portlet_tab2', data-toggle='tab') 已注册用户
+                li.active
+                  a(href='#portlet_tab1', data-toggle='tab') 未注册用户
+              .tab-content
+                #portlet_tab2.tab-pane
+                  form#register_form.form.form-horizontal(action='/departs/doAddRenter' method='post')
+                    .control-group
+                      label.control-label 电话:
+                      .controls
+                        input#autocompleteInput.m-wrap.medium(type='text' maxlength="11")
+                    .form-actions
+                      button#register_btn.btn.blue(type='button')
+                        i.icon-ok
+                        |  保存
+                      button.btn(type='button' onclick='javascript:history.back();')
+                        i.icon-undo
+                        |  取消
+                    input#hidden_renter(type="hidden" name="renter[_id]")
+                    input(type="hidden" name="depart[_id]" value="#{depart._id}")
+                    input(type="hidden" name="water_val" value="#{water_val}")
+                    input(type="hidden" name="electric_val" value="#{electric_val}")
+                #portlet_tab1.tab-pane.active
+                  form#new_form.form.form-horizontal(action='/departs/doCheckIn' method='post')
+                    .control-group
+                      label.control-label 姓名:
+                      .controls
+                        input#nickname.m-wrap.medium.require(type='text' maxlength="4" name='renter[nickname]' data-rule="*")
+                        span.help-inline.red * 必填
+                    .control-group
+                      label.control-label 电话:
+                      .controls
+                        input#phone.m-wrap.medium(type='text' maxlength="11" name='renter[phone]' data-rule="m" data-errmsg="手机号码格式有误")
+                        span.help-inline.red * 必填
+                    .control-group
+                      label.control-label 性别:
+                      .controls
+                        select#gendor_select.m-wrap.medium(name='renter[gender]')
+                          option(value="1") 男
+                          option(value="0") 女
+                    .control-group
+                      label.control-label 身份证:
+                      .controls
+                        input.m-wrap.medium(type='text' name='renter[ID_Card]' data-rule="idcard" data-errmsg="身份证号码格式有误" data-ignore="true")
+                    .control-group
+                      label.control-label 备注:
+                      .controls
+                        textarea.m-wrap.medium(rows="5" name='renter[information]')
+                    .form-actions
+                      button#new_btn.btn.blue(type='button')
+                        i.icon-ok
+                        |  保存
+                      button.btn(type='button' onclick='javascript:history.back();')
+                        i.icon-undo
+                        |  取消
+                    input(type="hidden" name="depart[_id]" value="#{depart._id}")
+                    input(type="hidden" name="water_val" value="#{water_val}")
+                    input(type="hidden" name="electric_val" value="#{electric_val}")
+    // END PAGE HEADER
+  // END PAGE CONTAINER

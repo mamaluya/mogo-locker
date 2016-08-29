@@ -1,0 +1,33 @@
+.page-content
+  // BEGIN PAGE CONTAINER
+  .container-fluid
+    // BEGIN PAGE HEADER
+    .row-fluid
+      .span12
+        // BEGIN PAGE TITLE & BREADCRUMB
+          h3.page-title
+            | 公寓管理
+            small --公寓一览
+        // END PAGE TITLE & BREADCRUMB
+        .portlet.box(class="#{me.settings.color}")
+          .portlet-title
+            .caption
+              i.icon-reorder
+              | 用户检索
+          .portlet-body
+            .row-fluid
+              form(action="/renters/list" method="get" onsubmit="return check_keyword();")
+                .controls.controls-row
+                  input#keyword.span2.m-wrap.no-left-margin(type="text" name='keyword' placeholder='姓名/电话' value="#{keyword?keyword:''}")
+                  button.btn.no-left-margin 检索
+                .form-section.no-margin
+            .row-fluid
+              .tiles
+                each renter in renters
+                  .tile(class="#{renter.departs.length?'bg-blue':'bg-grey'}")
+                    .tile-body
+                      i(class="#{renter.gender?'icon-male':'icon-female'}")
+                    .tile-object
+                      .name #{renter.nickname}
+                      .number #{renter.phone}
+                    input(name="_id" value="#{renter._id}")

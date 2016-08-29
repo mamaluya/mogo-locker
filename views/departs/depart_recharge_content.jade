@@ -1,0 +1,66 @@
+.page-content
+  // BEGIN PAGE CONTAINER
+  .container-fluid
+    // BEGIN PAGE HEADER
+    .row-fluid
+      .span12
+        // BEGIN PAGE TITLE & BREADCRUMB
+          h3.page-title
+            | 公寓管理
+            small --添加公寓
+        // END PAGE TITLE & BREADCRUMB
+        .portlet.box.tabbable(class="#{me.settings.color}")
+          .portlet-title
+            .caption
+              i.icon-reorder
+              | #{depart.building_num}号楼#{depart.room_num}室
+          .portlet-body
+            .tabbable.portlet-tabs
+              ul.nav.nav-tabs
+                li
+                  a(href='#portlet_tab2', data-toggle='tab') 充值记录
+                li.active
+                  a(href='#portlet_tab1', data-toggle='tab') 充值
+              .tab-content
+                #portlet_tab1.tab-pane.active
+                  form#recharge_form.form.form-horizontal
+                    .control-group
+                      label.control-label 帐户余额:
+                      .controls
+                        .input-append
+                          input.m-wrap.medium(type='text' readonly value="#{depart.balance}")
+                          .add-on 元
+                    .control-group
+                      label.control-label 充值余额:
+                      .controls
+                        .input-append
+                          input#money.m-wrap.medium(type='text' maxlength="8")
+                          .add-on 元
+                    .form-actions
+                      button#recharge_btn.btn.blue(type='button')
+                        i.icon-ok
+                        |  确认
+                      button.btn(type='button' onclick='javascript:history.back();')
+                        i.icon-undo
+                        |  取消
+                    input#hidden_id(type="hidden" value="#{depart._id}")
+                    input#hidden_building_num(type="hidden" value="#{depart.building_num}")
+                    input#hidden_floor_num(type="hidden" value="#{depart.floor_num}")
+                #portlet_tab2.tab-pane
+                  .row-fluid
+                    .controls.controls-row
+                      input#start.span2.m-wrap.no-left-margin.datetimepicker(type="text" placeholder='起始时间')
+                      input#end.span2.m-wrap.no-left-margin.datetimepicker(type="text" placeholder='终止时间')
+                      #history_btn.btn.no-left-margin 检索
+                  .row-fluid
+                    table.table.table-hover
+                      thead
+                        tr
+                          th #
+                          th 充值金额
+                          th 充值时间
+                          th 备注
+                      tbody
+
+    // END PAGE HEADER
+  // END PAGE CONTAINER

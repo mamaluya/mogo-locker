@@ -1,0 +1,38 @@
+.page-content
+  // BEGIN PAGE CONTAINER
+  .container-fluid
+    // BEGIN PAGE HEADER
+    .row-fluid
+      .span12
+        // BEGIN PAGE TITLE & BREADCRUMB
+          h3.page-title
+            | 公寓管理
+            small --添加公寓
+        // END PAGE TITLE & BREADCRUMB
+        .portlet.box(class="#{me.settings.color}")
+          .portlet-title
+            .caption
+              i.icon-reorder
+              | 系统日志
+          .portlet-body
+            .row-fluid
+              table.table.table-hover
+                thead
+                  tr
+                    th #
+                    th 标题
+                    th 内容
+                    th 时间
+                tbody
+                  each log, index in logs
+                    tr
+                      th #{index}
+                      th #{log.title}
+                      th #{log.content}
+                      th #{log.time}
+            .row-fluid
+              span(style="float: right;") 只显示最近的20条数据
+              span(style="float: right;").red
+                i.icon-star &nbsp;
+    // END PAGE HEADER
+  // END PAGE CONTAINER

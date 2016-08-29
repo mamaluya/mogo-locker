@@ -1,0 +1,63 @@
+﻿extends ../layout
+
+block content
+  body(class="#{me.settings.layoutOption == 'boxed' ? 'page-boxed ' : ''}#{me.settings.headerOption == 'fixed' ? 'page-header-fixed ' : ''}#{me.settings.sidebarOption == 'fixed' ? 'page-sidebar-fixed ' : ''}#{me.settings.footerOption == 'fixed' ? 'page-footer-fixed ' : ''}#{me.settings.sidebar ? me.settings.sidebar : ''}")
+    // BEGIN HEADER
+    include ../body-header
+    // END HEADER
+    // BEGIN CONTAINER
+    if me.settings.layoutOption == 'boxed'
+      .container
+        .page-container.row-fluid
+          // BEGIN SIDEBAR
+          include ../body-sidebar
+          // END SIDEBAR
+          // BEGIN PAGE
+          include settings_info_content
+          // END PAGE
+        // END CONTAINER
+        include ../body-footer
+    else
+      .page-container.row-fluid
+        // BEGIN SIDEBAR
+        include ../body-sidebar
+        // END SIDEBAR
+        // BEGIN PAGE
+        include settings_info_content
+        // END PAGE
+      // END CONTAINER
+      // BEGIN FOOTER
+      include ../body-footer
+      // END FOOTER
+    // BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time)
+    script(src='../javascript/app.js')
+    script(src='../javascript/jquery-form.js')
+    script(src='../javascript/avalidate.js')
+    script.
+      jQuery(document).ready(function () {
+        // initiate layout and plugins
+        App.init();
+
+        V.init({
+          area: "form",
+          btn: "#saveBtn",
+          tip: function (e, msg) {
+            toastr.warning(msg);
+          },
+          success: function (form, formData) {
+            var options = {
+              success: function (data) {
+                toastr.success("水电单价信息保存成功");
+                setTimeout(function () {
+                  window.location.href = "/settings/info";
+                }, 1000);
+              },
+              error: function (data) {
+                toastr.error("未知错误, 请重新操作");
+              }
+            }
+            $("form").ajaxSubmit(options);
+          }
+        });
+      });
+    // END JAVASCRIPTS

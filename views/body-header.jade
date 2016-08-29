@@ -1,0 +1,76 @@
+.header.navbar.navbar-inverse(class="#{me.settings.headerOption=='fixed'?'navbar-fixed-top':'navbar-static-top'}")
+  // BEGIN TOP NAVIGATION BAR
+  .navbar-inner
+    div(class="#{me.settings.layoutOption=='boxed'?'container':'container-fluid'}")
+      // BEGIN LOGO
+      a.brand(href='/index')
+        img(src='../image/logo.png', alt='logo')
+      // END LOGO
+      // BEGIN RESPONSIVE MENU TOGGLER
+      a.btn-navbar.collapsed(href='javascript:;', data-toggle='collapse', data-target='.nav-collapse')
+        img(src='../image/menu-toggler.png', alt='')
+      // END RESPONSIVE MENU TOGGLER
+      // BEGIN TOP NAVIGATION MENU
+      ul.nav.pull-right
+        // BEGIN USER LOGIN DROPDOWN
+        li.dropdown.user
+          a.dropdown-toggle(href='#', data-toggle='dropdown')
+            img(alt='', src='../image/avatar1_small.jpg')
+            span.username #{me.nickname}
+            i.icon-angle-down
+          ul.dropdown-menu
+            li#personalInfo
+              a(href='javascript:;')
+                i.icon-user
+                | 个人信息
+            li.divider
+            li#changePwd
+              a(href='javascript:;')
+                i.icon-lock
+                | 修改密码
+            li
+              a(href='javascript:window.location.href="/logOut"')
+                i.icon-key
+                | 退出
+        // END USER LOGIN DROPDOWN
+        // BEGIN STYLE CUSTOMIZER
+        li.dropdown
+          .color-panel.hidden-phone
+            .color-mode-icons.icon-color
+            .color-mode-icons.icon-color-close
+            .color-mode
+              p 主题颜色
+              ul.inline
+                li.color-black.color-default(data-style='default' class='#{me.settings.color=="default"?"current":""}')
+                li.color-blue(data-style='blue' class='#{me.settings.color=="blue"?"current":""}')
+                li.color-brown(data-style='brown' class='#{me.settings.color=="brown"?"current":""}')
+                li.color-purple(data-style='purple' class='#{me.settings.color=="purple"?"current":""}')
+                li.color-grey(data-style='grey' class='#{me.settings.color=="grey"?"current":""}')
+                li.color-white.color-light(data-style='light' class='#{me.settings.color=="light"?"current":""}')
+              label
+                span 布局
+                select.layout-option.m-wrap.small
+                  option(value='fluid') 平铺
+                  option(value='boxed') 居中
+                input#layoutOptionVal(type="hidden" value="#{me.settings.layoutOption}")
+              label
+                span 顶部
+                select.header-option.m-wrap.small
+                  option(value='fixed') 固定
+                  option(value='default') 默认
+                input#headerOptionVal(type="hidden" value="#{me.settings.headerOption}")
+              label
+                span 左侧
+                select.sidebar-option.m-wrap.small
+                  option(value='fixed') 固定
+                  option(value='default') 默认
+                input#sidebarOptionVal(type="hidden" value="#{me.settings.sidebarOption}")
+              label
+                span 底部
+                select.footer-option.m-wrap.small
+                  option(value='fixed') 固定
+                  option(value='default') 默认
+                input#footerOptionVal(type="hidden" value="#{me.settings.footerOption}")
+          // END BEGIN STYLE CUSTOMIZER
+      // END TOP NAVIGATION MENU
+  // END TOP NAVIGATION BAR

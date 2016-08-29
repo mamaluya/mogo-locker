@@ -1,0 +1,16 @@
+.footer
+  if me.settings.layoutOption=='boxed' && (me.settings.footerOption=='fixed' || me.settings.sidebarOption=='default')
+    .container
+      .footer-inner
+        | 2016 © 安恒世通
+        a(href='http://www.friel.cn/page.html', title='安恒世通', target='_blank') 智能门锁一站式解决方案
+      .footer-tools
+        span.go-top
+          i.icon-angle-up
+  else
+    .footer-inner
+      | 2016 © 安恒世通
+      a(href='http://www.friel.cn/page.html', title='安恒世通', target='_blank') 智能门锁一站式解决方案
+    .footer-tools
+      span.go-top
+        i.icon-angle-up

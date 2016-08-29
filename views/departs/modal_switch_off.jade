@@ -1,0 +1,9 @@
+.modal#switch_off_modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-body(style="padding: 8%;")
+        .row-fluid
+          i.icon-warning-sign.big(style="color: brown")   确认为 #{depart.building_num}号楼  #{depart.room_num}室拉闸断电吗?
+      .modal-footer
+        .btn(data-dismiss='modal') 取消
+        .btn.red(onclick="switchOff();") 确认

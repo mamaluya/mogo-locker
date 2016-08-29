@@ -1,0 +1,54 @@
+.page-content
+  // BEGIN PAGE CONTAINER
+  .container-fluid
+    // BEGIN PAGE HEADER
+    .row-fluid
+      .span12
+        // BEGIN PAGE TITLE & BREADCRUMB
+          h3.page-title
+            | 公寓管理
+            small --公寓信息
+        // END PAGE TITLE & BREADCRUMB
+        .portlet.box(class="#{me.settings.color}")
+          .portlet-title
+            .caption
+              i.icon-reorder
+              | 公寓信息
+          .portlet-body
+            form#depart_form.form.form-horizontal(action='/departs/save' method='post')
+              .control-group
+                label.control-label 楼号:
+                .controls
+                  input#building_num.m-wrap.medium.require(type='text' maxlength="2" name='depart[building_num]' data-rule="*" value=depart.building_num)
+                  span.help-inline.red * 必填
+              .control-group
+                label.control-label 房间号:
+                .controls
+                  input#room_num.m-wrap.medium(type='text' maxlength="4" name='depart[room_num]' data-rule="*" value=depart.room_num)
+                  span.help-inline.red * 必填
+              .control-group
+                label.control-label 户型:
+                .controls
+                  input.m-wrap.medium(type='text' name='depart[room_style]' value=depart.room_style)
+              .control-group
+                label.control-label 面积:
+                .controls
+                  input.m-wrap.medium(type='text' name='depart[room_area]' data-rule="num" data-ignore="true" value=depart.room_area)
+              .control-group
+                label.control-label 水表编号:
+                .controls
+                  input.m-wrap.medium(type='text' name='depart[water_code]' value=depart.water_code)
+              .control-group
+                label.control-label 电表编号:
+                .controls
+                  input.m-wrap.medium(type='text' name='depart[electric_code]' value=depart.electric_code)
+              .form-actions
+                button#saveBtn.btn.blue(type='button')
+                  i.icon-ok
+                  |  保存
+                button.btn(type='button' onclick='javascript:history.back();')
+                  i.icon-undo
+                  |  取消
+              input(type='hidden' name='depart[_id]' value=depart._id)
+    // END PAGE HEADER
+  // END PAGE CONTAINER

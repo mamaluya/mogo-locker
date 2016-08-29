@@ -1,0 +1,12 @@
+.modal#check_out_modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close(type='button', data-dismiss='modal', aria-label='Close')
+        h4.modal-title 退租提示
+      .modal-body(style="padding: 8%;")
+        .row-fluid
+          i.icon-warning-sign.big(style="color: brown")  请确认结清帐户余额，继续请点击确认。
+      .modal-footer
+        .btn(data-dismiss='modal') 取消
+        .btn.red(onclick="checkOut();") 确认

@@ -1,0 +1,40 @@
+.page-content
+  // BEGIN PAGE CONTAINER
+  .container-fluid
+    // BEGIN PAGE HEADER
+    .row-fluid
+      .span12
+        // BEGIN PAGE TITLE & BREADCRUMB
+          h3.page-title
+            | 公寓管理
+            small --添加公寓
+        // END PAGE TITLE & BREADCRUMB
+        .portlet.box(class="#{me.settings.color}")
+          .portlet-title
+            .caption
+              i.icon-reorder
+              | 水电单价
+          .portlet-body
+            form.form.form-horizontal(action='/settings/save' method='post')
+              .control-group
+                label.control-label 水费单价:
+                .controls
+                  .input-append
+                    input#water.m-wrap.medium.require(type='text' name='rate[water]' value="#{rate.water}" maxlength="8" data-rule="money")
+                    span.add-on 元 每吨
+              .control-group
+                label.control-label 电费单价:
+                .controls
+                  .input-append
+                    input#electric.m-wrap.medium(type='text' name='rate[electric]' value="#{rate.electric}" maxlength="8" data-rule="money")
+                    span.add-on 元 每度
+              .form-actions
+                button#saveBtn.btn.blue(type='button')
+                  i.icon-ok
+                  |  保存
+                button.btn(type='button' onclick='javascript:history.back();')
+                  i.icon-undo
+                  |  取消
+              input(type="hidden" name="rate[_id]" value="#{rate._id}")
+    // END PAGE HEADER
+  // END PAGE CONTAINER

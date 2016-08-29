@@ -1,0 +1,36 @@
+.page-content
+  // BEGIN PAGE CONTAINER
+  .container-fluid
+    // BEGIN PAGE HEADER
+    .row-fluid
+      .span12
+        // BEGIN PAGE TITLE & BREADCRUMB
+          h3.page-title
+            | 公寓管理
+            small --添加公寓
+        // END PAGE TITLE & BREADCRUMB
+        .portlet.box(class="#{me.settings.color}")
+          .portlet-title
+            .caption
+              i.icon-reorder
+              | 个人信息
+          .portlet-body
+            form#admin_form.form.form-horizontal(action='/index/savePersonalInfo' method='post')
+              .control-group
+                label.control-label 昵称:
+                .controls
+                  input.m-wrap.medium.require(type='text' maxlength="8" name='admin[nickname]' value=me.nickname data-rule="*")
+                  span.help-inline.red * 必填
+              .control-group
+                label.control-label 电话:
+                .controls
+                  input.m-wrap.medium(type='text' maxlength="11" name='admin[phone]' value=me.phone data-rule="m" data-errmsg="请填写正确的手机号码" data-ignore="true")
+              .form-actions
+                button#saveBtn.btn.blue(type='button')
+                  i.icon-ok
+                  |  保存
+                button.btn(type='button' onclick='javascript:history.back();')
+                  i.icon-undo
+                  |  取消
+    // END PAGE HEADER
+  // END PAGE CONTAINER

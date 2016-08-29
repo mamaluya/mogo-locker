@@ -1,0 +1,124 @@
+﻿extends ../layout
+
+append css
+  link(href='../css/bootstrap-datetimepicker.min.css', rel='stylesheet', type='text/css')
+
+block content
+  body(class="#{me.settings.layoutOption == 'boxed' ? 'page-boxed ' : ''}#{me.settings.headerOption == 'fixed' ? 'page-header-fixed ' : ''}#{me.settings.sidebarOption == 'fixed' ? 'page-sidebar-fixed ' : ''}#{me.settings.footerOption == 'fixed' ? 'page-footer-fixed ' : ''}#{me.settings.sidebar ? me.settings.sidebar : ''}")
+    // BEGIN HEADER
+    include ../body-header
+    // END HEADER
+    // BEGIN CONTAINER
+    if me.settings.layoutOption == 'boxed'
+      .container
+        .page-container.row-fluid
+          // BEGIN SIDEBAR
+          include ../body-sidebar
+          // END SIDEBAR
+          // BEGIN PAGE
+          include depart_recharge_content
+          // END PAGE
+        // END CONTAINER
+        include ../body-footer
+    else
+      .page-container.row-fluid
+        // BEGIN SIDEBAR
+        include ../body-sidebar
+        // END SIDEBAR
+        // BEGIN PAGE
+        include depart_recharge_content
+        // END PAGE
+      // END CONTAINER
+      // BEGIN FOOTER
+      include ../body-footer
+      // END FOOTER
+    // BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time)
+    script(src='../javascript/app.js')
+    script(src='../javascript/bootstrap-datetimepicker.min.js')
+    script(src='../javascript/bootstrap-datetimepicker.zh-CN.js')
+    script.
+      jQuery(document).ready(function () {
+        // initiate layout and plugins
+        App.init();
+
+        $('.datetimepicker').datetimepicker({
+          language: 'zh-CN',
+          format: 'yyyy-mm-dd',
+          autoclose: true,
+          startView: 2,
+          maxView: 4,
+          minView: 2
+        });
+
+        $("#recharge_btn").on("click", function(e){
+          var money = $("#money").val().trim();
+          var depart_id = $("#hidden_id").val();
+          var building_num = $("#hidden_building_num").val();
+          var floor_num = $("#hidden_floor_num").val();
+          var regEx = /^(([0-9]|([1-9][0-9]{0,9}))((\.[0-9]{1,2})?))$/;
+          if (!regEx.test(money)){
+            toastr.warning("请输入正确的货类型");
+            $("#money").focus();
+            return;
+          }
+          if (money < 300){
+            toastr.warning("请至少充值300元");
+            $("#money").focus();
+            return;
+          }
+          $.ajax({
+            url: "/departs/doRecharge",
+            type: "post",
+            data: {
+              depart_id: depart_id,
+              money: money
+            },
+            success: function(data){
+              if (data.result == "success") {
+                toastr.success("充值成功, 当前余额 " + data.msg + " 元");
+                setTimeout(function () {
+                  window.location.href = "/departs/list?building_num=" + building_num + "&floor_num=" + floor_num;
+                }, 2000);
+              } else {
+                toastr.warning(data.msg);
+              }
+            },
+            error: function (data) {
+              toastr.error("未知错误, 请重新操作");
+              console.error(data);
+            }
+          });
+        });
+
+        $("#history_btn").on("click", function(e){
+          var depart_id = $("#hidden_id").val();
+          var start = $("#start").val();
+          var end = $("#end").val();
+          if (!start) {
+            toastr.info("请设置查询起始时间");
+            return;
+          }
+          if(!end) {
+            toastr.info("请设置查询终止时间");
+            return;
+          }
+          $.ajax({
+            url: "/departs/rechargeHistory",
+            type: "post",
+            data: {
+              depart_id: depart_id,
+              start: start,
+              end: end
+            },
+            success: function(data){
+              $("tbody").empty().append(data);
+            },
+            error: function (data) {
+              toastr.error("未知错误, 请重新操作");
+              console.error(data);
+            }
+          });
+        });
+      });
+
+    // END JAVASCRIPTS

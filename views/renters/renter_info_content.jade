@@ -1,0 +1,53 @@
+.page-content
+  // BEGIN PAGE CONTAINER
+  .container-fluid
+    // BEGIN PAGE HEADER
+    .row-fluid
+      .span12
+        // BEGIN PAGE TITLE & BREADCRUMB
+          h3.page-title
+            | 公寓管理
+            small --公寓信息
+        // END PAGE TITLE & BREADCRUMB
+        .portlet.box.blue
+          .portlet-title
+            .caption
+              i.icon-reorder
+              | 用户信息
+          .portlet-body
+            form#renter_form.form.form-horizontal(action='/renters/save' method='post')
+              .control-group
+                label.control-label 姓名:
+                .controls
+                  input#nickname.m-wrap.medium.require(type='text' maxlength="4" name='renter[nickname]' value=renter.nickname data-rule="*")
+                  span.help-inline.red * 必填
+              .control-group
+                label.control-label 电话:
+                .controls
+                  input#phone.m-wrap.medium(type='text' maxlength="11" name='renter[phone]' value=renter.phone data-rule="m"  data-errmsg="手机号码格式有误")
+                  span.help-inline.red * 必填
+              .control-group
+                label.control-label 性别:
+                .controls
+                  select#gender_select.m-wrap.medium(name='renter[gender]')
+                    option(value="1") 男
+                    option(value="0") 女
+                  input#hidden_gender.m-wrap.medium(type='hidden' value="#{renter.gender}")
+              .control-group
+                label.control-label 身份证:
+                .controls
+                  input.m-wrap.medium(type='text' name='renter[ID_Card]' value=renter.ID_Card data-rule="idcard" data-errmsg="身份证号码格式有误" data-ignore="true")
+              .control-group
+                label.control-label 备注:
+                .controls
+                  textarea.m-wrap.medium(rows="5" name='renter[information]')=renter.information
+              .form-actions
+                button#saveBtn.btn.blue(type='button')
+                  i.icon-ok
+                  |  保存
+                button.btn(type='button' onclick='javascript:history.back();')
+                  i.icon-undo
+                  |  取消
+              input(type='hidden' name='renter[_id]' value=renter._id)
+    // END PAGE HEADER
+  // END PAGE CONTAINER

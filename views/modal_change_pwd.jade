@@ -1,0 +1,23 @@
+.modal#change_pwd_modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close(type='button', data-dismiss='modal', aria-label='Close')
+        h4.modal-title 修改密码
+      .modal-body(style="padding: 8%;")
+        .form.form-horizontal
+          .control-group
+            label.control-label 原密码:
+            .controls
+              input#oldPwd.m-wrap.medium(type='text' maxlength="18")
+          .control-group
+            label.control-label 新密码:
+            .controls
+              input#newPwd.m-wrap.medium(type='text' maxlength="18")
+          .control-group
+            label.control-label 确认新密码:
+            .controls
+              input#confirmPwd.m-wrap.medium(type='text' maxlength="18")
+      .modal-footer
+        .btn(data-dismiss='modal') 取消
+        #changePwdBtn.btn.blue 确认

@@ -1,0 +1,85 @@
+﻿extends ../layout
+
+block content
+  body(class="#{me.settings.layoutOption == 'boxed' ? 'page-boxed ' : ''}#{me.settings.headerOption == 'fixed' ? 'page-header-fixed ' : ''}#{me.settings.sidebarOption == 'fixed' ? 'page-sidebar-fixed ' : ''}#{me.settings.footerOption == 'fixed' ? 'page-footer-fixed ' : ''}#{me.settings.sidebar ? me.settings.sidebar : ''}")
+    // BEGIN HEADER
+    include ../body-header
+    // END HEADER
+    // BEGIN CONTAINER
+    if me.settings.layoutOption == 'boxed'
+      .container
+        .page-container.row-fluid
+          // BEGIN SIDEBAR
+          include ../body-sidebar
+          // END SIDEBAR
+          // BEGIN PAGE
+          include depart_check_out_content
+          // END PAGE
+        // END CONTAINER
+        include ../body-footer
+    else
+      .page-container.row-fluid
+        // BEGIN SIDEBAR
+        include ../body-sidebar
+        // END SIDEBAR
+        // BEGIN PAGE
+        include depart_check_out_content
+        // END PAGE
+      // END CONTAINER
+      // BEGIN FOOTER
+      include ../body-footer
+      // END FOOTER
+    // BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time)
+    script(src='../javascript/app.js')
+    script.
+      jQuery(document).ready(function () {
+        // initiate layout and plugins
+        App.init();
+
+      });
+
+      function showCheckOutModal() {
+        $.ajax({
+          url: "/departs/showCheckOutModal",
+          type: "get",
+          success: function (data) {
+            $("body").append(data);
+            $("#check_out_modal").modal("show");
+            $("#check_out_modal").on('hidden.bs.modal', function (e) {
+              $(this).remove();
+            });
+          }
+        });
+      }
+
+      function checkOut() {
+        var depart_id = $("#hidden_id").val();
+        var water_val = $("#hidden_water_val").val();
+        var electric_val = $("#hidden_electric_val").val();
+        var building_num = $("#hidden_building_num").val();
+        var floor_num = $("#hidden_floor_num").val();
+        $.ajax({
+          url: "/departs/doCheckOut",
+          type: "post",
+          data: {
+            depart_id: depart_id,
+            water_val: water_val,
+            electric_val: electric_val
+          },
+          success: function (data) {
+            if (data.result == "success") {
+              toastr.success("退租操作成功");
+              $("#check_out_modal").modal("hide");
+              window.location.href = "/departs/list?building_num=" + building_num + "&floor_num=" + floor_num;
+            } else {
+              toastr.warning(data.msg);
+            }
+          },
+          error: function (data) {
+            toastr.error("未知错误, 请重新操作");
+            console.error(data);
+          }
+        });
+      }
+
+  // END JAVASCRIPTS

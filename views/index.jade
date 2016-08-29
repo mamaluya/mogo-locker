@@ -1,0 +1,130 @@
+﻿extends ./layout
+
+block content
+  body(class="#{me.settings.layoutOption == 'boxed' ? 'page-boxed ' : ''}#{me.settings.headerOption == 'fixed' ? 'page-header-fixed ' : ''}#{me.settings.sidebarOption == 'fixed' ? 'page-sidebar-fixed ' : ''}#{me.settings.footerOption == 'fixed' ? 'page-footer-fixed ' : ''}#{me.settings.sidebar ? me.settings.sidebar : ''}")
+    // BEGIN HEADER
+    include ./body-header
+    // END HEADER
+    // BEGIN CONTAINER
+    if me.settings.layoutOption == 'boxed'
+      .container
+        .page-container.row-fluid
+          // BEGIN SIDEBAR
+          include ./body-sidebar
+          // END SIDEBAR
+          // BEGIN PAGE
+          include ./index_content
+          // END PAGE
+      include ./body-footer
+      // END CONTAINER
+    else
+      .page-container.row-fluid
+        // BEGIN SIDEBAR
+        include ./body-sidebar
+        // END SIDEBAR
+        // BEGIN PAGE
+        include ./index_content
+        // END PAGE
+
+      // BEGIN FOOTER
+      include ./body-footer
+      // END FOOTER
+    // END CONTAINER
+
+    // BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time)
+    script(src='../javascript/app.js')
+    script(src='../javascript/echarts.common.min.js')
+    script.
+      jQuery(document).ready(function () {
+        // initiate layout and plugins
+        localStorage.clear();
+        App.init();
+
+        jQuery("#depart_chart").height(jQuery("#depart_chart").width() * 0.666);
+        jQuery("#renter_chart").height(jQuery("#renter_chart").width() * 0.666);
+
+        var depart_chart = echarts.init(document.getElementById('depart_chart'));
+        var renter_chart = echarts.init(document.getElementById('renter_chart'));
+        $.ajax({
+          url: "/index/getSummary",
+          type: "get",
+          success: function (data) {
+            var depart_chart_option = {
+              title: {
+                text: '房间入住比',
+                subtext: '',
+                x: 'center'
+              },
+              tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+              },
+              legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: ['空   闲', '使用中']
+              },
+              series: [
+                {
+                  name: '房间入住状态',
+                  type: 'pie',
+                  radius: '55%',
+                  center: ['50%', '60%'],
+                  data: [
+                    {value: data.depart_off, name: '空   闲'},
+                    {value: data.depart_on, name: '使用中'}
+                  ],
+                  itemStyle: {
+                    emphasis: {
+                      shadowBlur: 10,
+                      shadowOffsetX: 0,
+                      shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                  }
+                }
+              ]
+            };
+
+
+            var renter_chart_option = {
+              title: {
+                text: '用户入住比',
+                subtext: '',
+                x: 'center'
+              },
+              tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+              },
+              legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: ['未入住', '入住中']
+              },
+              series: [
+                {
+                  name: '用户入住状态',
+                  type: 'pie',
+                  radius: '55%',
+                  center: ['50%', '60%'],
+                  data: [
+                    {value: data.renter_off, name: '未入住'},
+                    {value: data.renter_on, name: '入住中'}
+                  ],
+                  itemStyle: {
+                    emphasis: {
+                      shadowBlur: 10,
+                      shadowOffsetX: 0,
+                      shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                  }
+                }
+              ]
+            };
+            depart_chart.setOption(depart_chart_option);
+            renter_chart.setOption(renter_chart_option);
+            $("#index_summary").text("登记房间: " + data.depart_all + "间 -- 注册用户: " + data.renter_all + "人");
+          }
+        });
+      });
+    // END JAVASCRIPTS

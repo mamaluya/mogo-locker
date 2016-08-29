@@ -1,0 +1,135 @@
+﻿extends ../layout
+
+append css
+  link(href='../css/bootstrap-datetimepicker.min.css', rel='stylesheet', type='text/css')
+
+block content
+  body(class="#{me.settings.layoutOption == 'boxed' ? 'page-boxed ' : ''}#{me.settings.headerOption == 'fixed' ? 'page-header-fixed ' : ''}#{me.settings.sidebarOption == 'fixed' ? 'page-sidebar-fixed ' : ''}#{me.settings.footerOption == 'fixed' ? 'page-footer-fixed ' : ''}#{me.settings.sidebar ? me.settings.sidebar : ''}")
+    // BEGIN HEADER
+    include ../body-header
+    // END HEADER
+    // BEGIN CONTAINER
+    if me.settings.layoutOption == 'boxed'
+      .container
+        .page-container.row-fluid
+          // BEGIN SIDEBAR
+          include ../body-sidebar
+          // END SIDEBAR
+          // BEGIN PAGE
+          include depart_bills_content
+          // END PAGE
+        // BEGIN FOOTER
+      include ../body-footer
+        // END FOOTER
+      // END CONTAINER
+    else
+      .page-container.row-fluid
+        // BEGIN SIDEBAR
+        include ../body-sidebar
+        // END SIDEBAR
+        // BEGIN PAGE
+        include depart_bills_content
+        // END PAGE
+      // BEGIN FOOTER
+      include ../body-footer
+      // END FOOTER
+    // END CONTAINER
+    // BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time)
+    script(src='../javascript/app.js')
+    script(src='../javascript/echarts.common.min.js')
+    script(src='../javascript/bootstrap-datetimepicker.min.js')
+    script(src='../javascript/bootstrap-datetimepicker.zh-CN.js')
+
+    script.
+      jQuery(document).ready(function () {
+        // initiate layout and plugins
+        App.init();
+        jQuery("#water_chart").height(jQuery("#water_chart").width() * 0.3);
+        jQuery("#electric_chart").height(jQuery("#water_chart").height());
+
+        $(".datetimepicker").datetimepicker({
+          language: 'zh-CN',
+          format: 'yyyy-mm',
+          autoclose: true,
+          startView: 3,
+          maxView: 4,
+          minView: 3
+        });
+
+      });
+
+      function getBills(type) {
+        console.log(type);
+        var keyword = $("#key_" + type).val();
+        if (!keyword) {
+          toastr.warning("请选择要查询的月份");
+          return;
+        }
+        var depart_id = $("#hidden_id").val();
+        $.ajax({
+          url: "/departs/getBills",
+          type: "get",
+          data: {
+            keyword: keyword,
+            depart_id: depart_id,
+            type: type
+          },
+          success: function (data) {
+            if (data.result == "success") {
+              var option = {
+                tooltip: {
+                  trigger: 'axis',
+                  axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                  }
+                },
+                legend: {
+                  data: ['用量', '金额']
+                },
+                grid: {
+                  left: '3%',
+                  right: '4%',
+                  bottom: '3%',
+                  containLabel: true
+                },
+                xAxis: [
+                  {
+                    type: 'category',
+                    data: data.date
+                  }
+                ],
+                yAxis: [
+                  {
+                    type: 'value'
+                  }
+                ],
+                series: [
+                  {
+                    name: '用量',
+                    type: 'bar',
+                    data: data.amount
+                  },
+                  {
+                    name: '金额',
+                    type: 'bar',
+                    stack: '广告',
+                    data: data.money
+                  }
+                ]
+              };
+              if (type == "water") {
+                var water_chart = echarts.init(document.getElementById('water_chart'));
+                water_chart.setOption(option);
+                $("#water_summary").text("月消费总量: " + data.total_amount  + "吨, 月消费金额: " + data.total_money + "元");
+              } else {
+                var electric_chart = echarts.init(document.getElementById('electric_chart'));
+                electric_chart.setOption(option);
+                $("#electric_summary").text("月消费总量: " + data.total_amount  + "度, 月消费金额: " + data.total_money + "元");
+              }
+            } else {
+              toastr.info("对不起，没有查到当月帐单记录");
+            }
+          }
+        });
+      }
+  // END JAVASCRIPTS

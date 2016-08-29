@@ -1,0 +1,401 @@
+﻿extends ../layout
+
+append css
+  link(href='../css/bootstrap-datetimepicker.min.css', rel='stylesheet', type='text/css')
+
+block content
+  body(class="#{me.settings.layoutOption == 'boxed' ? 'page-boxed ' : ''}#{me.settings.headerOption == 'fixed' ? 'page-header-fixed ' : ''}#{me.settings.sidebarOption == 'fixed' ? 'page-sidebar-fixed ' : ''}#{me.settings.footerOption == 'fixed' ? 'page-footer-fixed ' : ''}#{me.settings.sidebar ? me.settings.sidebar : ''}")
+    // BEGIN HEADER
+    include ../body-header
+    // END HEADER
+    // BEGIN CONTAINER
+    if me.settings.layoutOption == 'boxed'
+      .container
+        .page-container.row-fluid
+          // BEGIN SIDEBAR
+          include ../body-sidebar
+          // END SIDEBAR
+          // BEGIN PAGE
+          include depart_list_content
+          // END PAGE
+        // BEGIN FOOTER
+      include ../body-footer
+        // END FOOTER
+      // END CONTAINER
+    else
+      .page-container.row-fluid
+        // BEGIN SIDEBAR
+        include ../body-sidebar
+        // END SIDEBAR
+        // BEGIN PAGE
+        include depart_list_content
+        // END PAGE
+      // BEGIN FOOTER
+      include ../body-footer
+      // END FOOTER
+    // END CONTAINER
+    include right_click_menu
+    // BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time)
+    script(src='../javascript/app.js')
+    script(src='../javascript/bootstrap-datetimepicker.min.js')
+    script(src='../javascript/bootstrap-datetimepicker.zh-CN.js')
+    script.
+      jQuery(document).ready(function () {
+        // initiate layout and plugins
+        App.init();
+
+        jQuery(document).on('contextmenu', ".tile", function (e) {
+          jQuery("#rClkMenu>li").removeClass("hidden");
+          if (e.clientX > document.body.clientWidth - 160) {
+            jQuery("#rClkMenu").css("left", e.clientX - 160).css("top", e.clientY + document.body.scrollTop);
+          } else {
+            jQuery("#rClkMenu").css("left", e.clientX).css("top", e.clientY + document.body.scrollTop);
+          }
+          if ($(this).find("input[name=renters]").val() > 0) {
+            jQuery("#rClkMenu>#checkIn").addClass("hidden");
+          } else {
+            jQuery("#rClkMenu>#checkOut").addClass("hidden");
+            jQuery("#rClkMenu>#renters").addClass("hidden");
+            jQuery("#rClkMenu>#recharge").addClass("hidden");
+            jQuery("#rClkMenu>#bills").addClass("hidden");
+          }
+          if (!$(this).find("input[name=electric_code]").val()) {
+            jQuery("#rClkMenu>#switchOn").addClass("hidden");
+            jQuery("#rClkMenu>#switchOff").addClass("hidden");
+          } else {
+            if ($(this).find("input[name=switch]").val() == 1) {
+              jQuery("#rClkMenu>#switchOn").addClass("hidden");
+            } else {
+              jQuery("#rClkMenu>#switchOff").addClass("hidden");
+            }
+          }
+
+          jQuery("#rClkMenu").css("display", "block");
+          localStorage.setItem("current_room", $(this).find("input[name=_id]").val());
+          return false;
+        });
+
+        jQuery(document).on('click', function (e) {
+          jQuery("#rClkMenu").css("display", "none");
+        });
+
+        jQuery(".tile").on('click', function (e) {
+          window.location.href = "/departs/info?depart_id=" + $(this).find("input[name=_id]").val();
+        });
+
+        jQuery("#rClkMenu>#checkIn").on('click', function (e) {
+          var depart_id = localStorage.getItem("current_room");
+          $.ajax({
+            url: "/departs/getInterfaceInfo",
+            type: "post",
+            data: {
+              depart_id: depart_id
+            },
+            success: function (data) {
+              if (data.result == "success") {
+                window.location.href = "/departs/checkIn?depart_id=" + depart_id + "&water_val=" + data.water_val + "&electric_val=" + data.electric_val;
+              } else {
+                localStorage.setItem("water_val", data.water_val);
+                localStorage.setItem("electric_val", data.electric_val);
+                localStorage.setItem("message", data.msg);
+                $.ajax({
+                  url: "/departs/showWarningModal",
+                  type: "get",
+                  success: function (modal) {
+                    $("body").append(modal);
+                    $("#warning_modal").find("i").append(localStorage.getItem("message") + ", 如仍需继续请按确认键!");
+                    $("#warning_modal").find("#actionBtn").attr("onclick", "checkIn()");
+                    $("#warning_modal").modal("show");
+                    $("#warning_modal").on('hidden.bs.modal', function (e) {
+                      this.remove();
+                    });
+                  }
+                });
+              }
+            },
+            error: function (data) {
+              toastr.error("未知错误, 请重新操作");
+              console.error(data);
+            }
+          });
+        });
+
+        jQuery("#rClkMenu>#checkOut").on('click', function (e) {
+          var depart_id = localStorage.getItem("current_room");
+          $.ajax({
+            url: "/departs/getInterfaceInfo",
+            type: "post",
+            data: {
+              depart_id: depart_id
+            },
+            success: function (data) {
+              if (data.result == "success") {
+                window.location.href = "/departs/checkOut?depart_id=" + depart_id + "&water_val=" + data.water_val + "&electric_val=" + data.electric_val;
+              } else {
+                localStorage.setItem("water_val", data.water_val);
+                localStorage.setItem("electric_val", data.electric_val);
+                localStorage.setItem("message", data.msg);
+                $.ajax({
+                  url: "/departs/showWarningModal",
+                  type: "get",
+                  success: function (modal) {
+                    $("body").append(modal);
+                    $("#warning_modal").find("i").append(localStorage.getItem("message") + ", 如仍需继续请按确认键!");
+                    $("#warning_modal").find("#actionBtn").attr("onclick", "checkOut()");
+                    $("#warning_modal").modal("show");
+                    $("#warning_modal").on('hidden.bs.modal', function (e) {
+                      this.remove();
+                    });
+                  }
+                });
+              }
+            },
+            error: function (data) {
+              toastr.error("未知错误, 请重新操作");
+              console.error(data);
+            }
+          });
+        });
+
+        jQuery("#rClkMenu>#renters").on('click', function (e) {
+          window.location.href = "/departs/renters?depart_id=" + localStorage.getItem("current_room");
+        });
+
+        jQuery("#rClkMenu>#recharge").on('click', function (e) {
+          window.location.href = "/departs/preRecharge?depart_id=" + localStorage.getItem("current_room");
+        });
+
+        jQuery("#rClkMenu>#bills").on('click', function (e) {
+          window.location.href = "/departs/bills?depart_id=" + localStorage.getItem("current_room");
+        });
+
+        jQuery("#rClkMenu>#switchOn").on('click', function (e) {
+          $.ajax({
+            url: "/departs/showSwitchOnModal?depart_id=" + localStorage.getItem("current_room"),
+            type: "get",
+            success: function (data) {
+              $("body").append(data);
+              $("#switch_on_modal").modal("show");
+              $("#switch_on_modal").on('hidden.bs.modal', function (e) {
+                $(this).remove();
+              });
+            }
+          });
+        });
+
+        jQuery("#rClkMenu>#switchOff").on('click', function (e) {
+          $.ajax({
+            url: "/departs/showSwitchOffModal?depart_id=" + localStorage.getItem("current_room"),
+            type: "get",
+            success: function (data) {
+              $("body").append(data);
+              $("#switch_off_modal").modal("show");
+              $("#switch_off_modal").on('hidden.bs.modal', function (e) {
+                $(this).remove();
+              });
+            }
+          });
+        });
+
+        jQuery("#rClkMenu>#tempPwd").on('click', function (e) {
+          $.ajax({
+            url: "/departs/showTempPwdModal?depart_id=" + localStorage.getItem("current_room"),
+            type: "get",
+            success: function (data) {
+              $("body").append(data);
+              $("#temp_pwd_modal").modal("show");
+              $("#temp_pwd_modal").on('hidden.bs.modal', function (e) {
+                $(this).remove();
+              });
+            }
+          });
+        });
+
+        jQuery("#rClkMenu>#makeCard").on('click', function (e) {
+          $.ajax({
+            url: "/departs/showCardModal?depart_id=" + localStorage.getItem("current_room"),
+            type: "get",
+            success: function (data) {
+              $("body").append(data);
+              $("#make_card_modal").modal("show");
+              $("#make_card_modal").on('hidden.bs.modal', function (e) {
+                $(this).remove();
+              });
+              $(".datetimepicker").datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd hh:00:00',
+                autoclose: true,
+                startView: 2,
+                maxView: 4,
+                minView: 1
+              });
+            }
+          });
+        });
+
+        $("#building_select").val($("#hidden_building_num").val());
+        $("#floor_select").val($("#hidden_floor_num").val());
+        $("#room_num").val($("#hidden_room_num").val());
+
+      });
+
+      function changeBuilding() {
+        var building_num = $("#building_select").val();
+        $.ajax({
+          url: "/departs/getFloor?building_num=" + building_num,
+          type: "get",
+          success: function (data) {
+            $("#floor_select").empty().append(data);
+          },
+          error: function (data) {
+            toastr.error("未知错误, 请重新操作");
+            console.error(data);
+          }
+        });
+      }
+
+      function switchOn() {
+        $.ajax({
+          url: "/departs/switchOn?depart_id=" + localStorage.getItem("current_room"),
+          type: "get",
+          success: function (data) {
+            if (data.result == "success") {
+              toastr.success("送电成功");
+              $("#tile_" + localStorage.getItem("current_room")).find("input[name=switch]").val(1);
+              $("#switch_on_modal").modal("hide");
+            } else {
+              toastr.error(data.msg);
+            }
+          },
+          error: function (data) {
+            toastr.error("未知错误, 请重新操作");
+            console.error(data);
+          }
+        });
+      }
+
+      function switchOff() {
+        $.ajax({
+          url: "/departs/switchOff?depart_id=" + localStorage.getItem("current_room"),
+          type: "get",
+          success: function (data) {
+            if (data.result == "success") {
+              toastr.success("断电成功");
+              $("#tile_" + localStorage.getItem("current_room")).find("input[name=switch]").val(0);
+              $("#switch_off_modal").modal("hide");
+            } else {
+              toastr.error(data.msg);
+            }
+          },
+          error: function (data) {
+            toastr.error("未知错误, 请重新操作");
+            console.error(data);
+          }
+        });
+      }
+
+      function sendPwd() {
+        var phone = $("#temp_pwd_modal").find("input[name=phone]").val().trim();
+        var regEx = /^13[0-9]{9}$|14[0-9]{9}|15[0-9]{9}$|18[0-9]{9}$|17[0-9]{9}$/;
+        if (!regEx.test(phone)) {
+          toastr.warning("请输入正确的手机号码");
+          return;
+        }
+        $.ajax({
+          url: "/departs/sendPassword",
+          type: "post",
+          data: {
+            depart_id: localStorage.getItem("current_room"),
+            phone: phone
+          },
+          success: function (data) {
+            if (data.result == "success") {
+              toastr.success("身份验证通过，已成功发送密码");
+              $("#temp_pwd_modal").modal("hide");
+            } else {
+              toastr.error(data.msg);
+            }
+          },
+          error: function (data) {
+            toastr.error("未知错误, 请重新操作");
+            console.error(data);
+          }
+        });
+      }
+
+      function makeCard() {
+        var depart_id = $("#hidden_id").val();
+        var startTime = $("#startTime").val();
+        var endTime = $("#endTime").val();
+        var start = $("#start").val();
+        var end = $("#end").val();
+        if (!(start && startTime)) {
+          toastr.warning("请设置有效的起始时间");
+          return;
+        }
+        if (!(end && endTime)) {
+          toastr.warning("请设置有效的终止时间");
+          return;
+        }
+        $.ajax({
+          url: "/departs/makeCard",
+          type: "post",
+          data: {
+            depart_id: depart_id,
+            startTime: startTime,
+            endTime: endTime,
+            start: start,
+            end: end
+          },
+          success: function (data) {
+            if (data.result == "success") {
+              toastr.success("准备完毕, 请将空白卡放置于发卡器上");
+              $("#make_card_modal").modal("hide");
+            } else {
+              toastr.warning(data.msg);
+            }
+          },
+          error: function (data) {
+            toastr.error("未知错误, 请重新操作");
+            console.error(data);
+          }
+        });
+      }
+
+      function copyCard() {
+        var depart_id = $("#hidden_id").val();
+        $.ajax({
+          url: "/departs/copyCard",
+          type: "post",
+          data: {
+            depart_id: depart_id
+          },
+          success: function (data) {
+            if (data.result == "success") {
+              toastr.success("准备完毕, 请将空白卡放置于发卡器上");
+              $("#make_card_modal").modal("hide");
+            } else {
+              toastr.warning(data.msg);
+            }
+          },
+          error: function (data) {
+            toastr.error("未知错误, 请重新操作");
+            console.error(data);
+          }
+        });
+      }
+
+      function checkIn() {
+        var depart_id = localStorage.getItem("current_room");
+        var water_val = localStorage.getItem("water_val");
+        var electric_val = localStorage.getItem("electric_val");
+        window.location.href = "/departs/checkIn?depart_id=" + depart_id + "&water_val=" + water_val + "&electric_val=" + electric_val;
+      }
+
+      function checkOut() {
+        var depart_id = localStorage.getItem("current_room");
+        var water_val = localStorage.getItem("water_val");
+        var electric_val = localStorage.getItem("electric_val");
+        window.location.href = "/departs/checkOut?depart_id=" + depart_id + "&water_val=" + water_val + "&electric_val=" + electric_val;
+      }
+  // END JAVASCRIPTS

@@ -1,0 +1,49 @@
+.page-content
+  // BEGIN PAGE CONTAINER
+  .container-fluid
+    // BEGIN PAGE HEADER
+    .row-fluid
+      .span12
+        // BEGIN PAGE TITLE & BREADCRUMB
+          h3.page-title
+            | 公寓管理
+            small --公寓一览
+        // END PAGE TITLE & BREADCRUMB
+        .portlet.box.tabbable(class="#{me.settings.color}")
+          .portlet-title
+            .caption
+              i.icon-reorder
+              | #{depart.building_num}号楼#{depart.room_num}室
+          .portlet-body
+            .tabbable.portlet-tabs
+              ul.nav.nav-tabs
+                li
+                  a(href='#portlet_tab2', data-toggle='tab') 电费
+                li.active
+                  a(href='#portlet_tab1', data-toggle='tab') 水费
+              .tab-content
+                #portlet_tab1.tab-pane.active
+                  .row-fluid
+                    form
+                      .controls.controls-row
+                        input#key_water.datetimepicker.span2.m-wrap(type="text" name="keyword")
+                        button.btn.no-left-margin(type="button" onclick="getBills('water');") 检索
+                      .form-section.no-margin
+                  .row-fluid
+                    #water_chart
+
+                  .row-fluid(style="text-align: center;")
+                    span#water_summary
+                #portlet_tab2.tab-pane
+                  .row-fluid
+                    form
+                      .controls.controls-row
+                        input#key_electric.datetimepicker.span2.m-wrap(type="text" name="keyword")
+                        button.btn.no-left-margin(type="button" onclick="getBills('electric');") 检索
+                      .form-section.no-margin
+                  .row-fluid
+                    #electric_chart
+
+                  .row-fluid(style="text-align: center;")
+                    span#electric_summary
+                input#hidden_id.span2.m-wrap(type="hidden" value="#{depart._id}")

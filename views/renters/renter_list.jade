@@ -1,0 +1,72 @@
+﻿extends ../layout
+
+block content
+  body(class="#{me.settings.layoutOption == 'boxed' ? 'page-boxed ' : ''}#{me.settings.headerOption == 'fixed' ? 'page-header-fixed ' : ''}#{me.settings.sidebarOption == 'fixed' ? 'page-sidebar-fixed ' : ''}#{me.settings.footerOption == 'fixed' ? 'page-footer-fixed ' : ''}#{me.settings.sidebar ? me.settings.sidebar : ''}")
+    // BEGIN HEADER
+    include ../body-header
+    // END HEADER
+    // BEGIN CONTAINER
+    if me.settings.layoutOption == 'boxed'
+      .container
+        .page-container.row-fluid
+          // BEGIN SIDEBAR
+          include ../body-sidebar
+          // END SIDEBAR
+          // BEGIN PAGE
+          include renter_list_content
+          // END PAGE
+        // BEGIN FOOTER
+      include ../body-footer
+        // END FOOTER
+      // END CONTAINER
+    else
+      .page-container.row-fluid
+        // BEGIN SIDEBAR
+        include ../body-sidebar
+        // END SIDEBAR
+        // BEGIN PAGE
+        include renter_list_content
+        // END PAGE
+      // BEGIN FOOTER
+      include ../body-footer
+      // END FOOTER
+    // END CONTAINER
+    include right-click-menu
+    // BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time)
+    script(src='../javascript/app.js')
+    script.
+      jQuery(document).ready(function () {
+        // initiate layout and plugins
+        App.init();
+
+        jQuery(document).on('contextmenu', ".tile", function (e) {
+          jQuery("#rClkMenu>li").removeClass("hidden");
+          if (e.clientX > document.body.clientWidth - 160) {
+            jQuery("#rClkMenu").css("left", e.clientX - 160).css("top", e.clientY);
+          } else {
+            jQuery("#rClkMenu").css("left", e.clientX).css("top", e.clientY);
+          }
+          jQuery("#rClkMenu").css("display", "block");
+          return false;
+        });
+
+        jQuery(document).on('click', function (e) {
+          jQuery("#rClkMenu").css("display", "none");
+        });
+
+        jQuery(".tile").on('click', function (e) {
+          console.log($(this).find("input[name=_id]").val());
+          window.location.href = "/renters/info?renter_id=" + $(this).find("input[name=_id]").val();
+        });
+      });
+      function check_keyword() {
+        var keyword = jQuery("#keyword").val().trim();
+        if (keyword == "") {
+          toastr.info("请输入姓名或手机号码, 支持模糊检索");
+          return false;
+        } else {
+          return true;
+        }
+      }
+
+  // END JAVASCRIPTS

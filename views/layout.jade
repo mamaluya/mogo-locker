@@ -1,0 +1,46 @@
+doctype html
+//if IE 8
+  html.ie8(lang='en')
+//if IE 9
+  html.ie9(lang='en')
+// [if !IE] <!
+html(lang='en')
+  // <![endif]
+  // BEGIN HEAD
+  head
+    meta(charset='utf-8')
+    title 福瑞安 | 智能门锁管理系统
+    meta(content='width=device-width, initial-scale=1.0', name='viewport')
+    meta(content='', name='description')
+    meta(content='', name='author')
+    // BEGIN GLOBAL MANDATORY STYLES
+    block css
+      link(href='../css/bootstrap.min.css', rel='stylesheet', type='text/css')
+      link(href='../css/bootstrap-responsive.min.css', rel='stylesheet', type='text/css')
+      link(href='../css/font-awesome.min.css', rel='stylesheet', type='text/css')
+      link(href='../css/style-metro.css', rel='stylesheet', type='text/css')
+      link(href='../css/style.css', rel='stylesheet', type='text/css')
+      link(href='../css/style-responsive.css', rel='stylesheet', type='text/css')
+      link#style_color(href='../css/#{me.settings.color?me.settings.color:"default"}.css', rel='stylesheet', type='text/css')
+      link(href='../css/uniform.default.css', rel='stylesheet', type='text/css')
+      link(href='../css/toastr.min.css', rel='stylesheet', type='text/css')
+    // END GLOBAL MANDATORY STYLES
+
+    // BEGIN CORE PLUGINS
+    block js
+      script(src='../javascript/jquery-1.10.1.min.js', type='text/javascript')
+      script(src='../javascript/jquery-migrate-1.2.1.min.js', type='text/javascript')
+      // IMPORTANT! Load jquery-ui-1.10.1.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip
+      script(src='../javascript/jquery-ui-1.10.1.custom.min.js', type='text/javascript')
+      script(src='../javascript/bootstrap.min.js', type='text/javascript')
+      //if lt IE 9
+        script(src='../javascript/excanvas.min.js')
+        script(src='../javascript/respond.min.js')
+      script(src='../javascript/jquery.slimscroll.min.js', type='text/javascript')
+      script(src='../javascript/jquery.blockui.min.js', type='text/javascript')
+      script(src='../javascript/jquery.cookie.min.js', type='text/javascript')
+      script(src='../javascript/jquery.uniform.min.js', type='text/javascript')
+      script(src='../javascript/toastr.min.js', type='text/javascript')
+    // END CORE PLUGINS
+  // END HEAD
+  block content

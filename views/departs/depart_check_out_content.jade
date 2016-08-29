@@ -1,0 +1,38 @@
+.page-content
+  // BEGIN PAGE CONTAINER
+  .container-fluid
+    // BEGIN PAGE HEADER
+    .row-fluid
+      .span12
+        // BEGIN PAGE TITLE & BREADCRUMB
+          h3.page-title
+            | 公寓管理
+            small --添加公寓
+        // END PAGE TITLE & BREADCRUMB
+        .portlet.box(class="#{me.settings.color}")
+          .portlet-title
+            .caption
+              i.icon-reorder
+              | 余额结算
+          .portlet-body
+            form.form.form-horizontal(action='/departs/save' method='post')
+              .control-group
+                label.control-label 帐户余额:
+                .controls
+                  .input-append
+                    input.m-wrap.medium(type='text' readonly name='balance' value=balance)
+                    .add-on 元
+                input#hidden_water_val(type='hidden' name='water' value=water_val)
+                input#hidden_electric_val(type='hidden' name='electric' value=electric_val)
+              .form-actions
+                button.btn.red(type='button' onclick='showCheckOutModal();')
+                  i.icon-ok
+                  |  确定
+                button.btn(type='button' onclick='javascript:history.back();')
+                  i.icon-undo
+                  |  取消
+              input#hidden_id(type="hidden" value=depart._id)
+              input#hidden_building_num(type="hidden" value=depart.building_num)
+              input#hidden_floor_num(type="hidden" value=depart.floor_num)
+    // END PAGE HEADER
+  // END PAGE CONTAINER

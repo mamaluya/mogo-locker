@@ -1,0 +1,15 @@
+.modal#temp_pwd_modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close(type='button', data-dismiss='modal', aria-label='Close')
+        h4.modal-title 身份验证
+      .modal-body(style="padding: 8%;")
+        .form.form-horizontal
+          .control-group
+            label.control-label 发送至手机:
+            .controls
+              input.m-wrap.medium(type='text' name="phone" maxlength="11")
+      .modal-footer
+        .btn(data-dismiss='modal') 取消
+        .btn.blue(onclick="sendPwd();") 确认

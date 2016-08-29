@@ -1,0 +1,70 @@
+﻿extends ../layout
+
+block content
+  body(class="#{me.settings.layoutOption=='boxed'?'page-boxed ':''}#{me.settings.headerOption=='fixed'?'page-header-fixed ':''}#{me.settings.sidebarOption=='fixed'?'page-sidebar-fixed ':''}#{me.settings.footerOption=='fixed'?'page-footer-fixed ':''}#{me.settings.sidebar?me.settings.sidebar:''}")
+    // BEGIN HEADER
+    include ../body-header
+    // END HEADER
+    // BEGIN CONTAINER
+    if me.settings.layoutOption=='boxed'
+      .container
+        .page-container.row-fluid
+          // BEGIN SIDEBAR
+          include ../body-sidebar
+          // END SIDEBAR
+          // BEGIN PAGE
+          include depart_add_content
+          // END PAGE
+        // END CONTAINER
+        include ../body-footer
+    else
+      .page-container.row-fluid
+        // BEGIN SIDEBAR
+        include ../body-sidebar
+        // END SIDEBAR
+        // BEGIN PAGE
+        include depart_add_content
+        // END PAGE
+      // END CONTAINER
+      // BEGIN FOOTER
+      include ../body-footer
+      // END FOOTER
+    // BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time)
+    script(src='../javascript/app.js')
+    script(src='../javascript/jquery-form.js')
+    script(src='../javascript/avalidate.js')
+    script.
+      jQuery(document).ready(function () {
+        // initiate layout and plugins
+        App.init();
+        V.init({
+          area: "#depart_form",
+          btn: "#saveBtn",
+          tip: function (e, msg) {
+            toastr.warning(msg);
+          },
+          success: function (form, formData) {
+            var options = {
+              success: function (data) {
+                if (data.result == "success"){
+                  toastr.success("公寓信息保存成功");
+                  setTimeout(function(){
+                    var building_num = $("#building_num").val().trim();
+                    var room_num = $("#room_num").val().trim();
+                    var floor_num = room_num.substring(0, room_num.length-2);
+                    window.location.href = "/departs/list?building_num="+ building_num + "&floor_num="+floor_num;
+                  }, 1000);
+                }else {
+                  toastr.warning(data.msg);
+                }
+              },
+              error: function (data) {
+                toastr.error("未知错误, 请重新操作");
+                console.error(data);
+              }
+            }
+            $("form").ajaxSubmit(options);
+          }
+        });
+      });
+    // END JAVASCRIPTS

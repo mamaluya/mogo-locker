@@ -1,0 +1,36 @@
+.modal#make_card_modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close(type='button', data-dismiss='modal', aria-label='Close')
+        h4.modal-title 发卡信息
+      .modal-body
+        form#card_form.form.form-horizontal
+          .control-group
+            label.control-label 楼号:
+            .controls
+              input.m-wrap.medium(type='text' readonly value=depart.building_num)
+          .control-group
+            label.control-label 房号:
+            .controls
+              input.m-wrap.medium(type='text' readonly value=depart.room_num)
+          .control-group
+            label.control-label 发卡次数:
+            .controls
+              input.m-wrap.medium(type='text' readonly value=depart.card_times)
+          .control-group
+            label.control-label 起始时间:
+            .controls
+              input#start.datetimepicker.m-wrap.medium(type='text' name="start" value=depart.start data-link-field="startTime" data-link-format="yymmddhh0000")
+              input#startTime(type='hidden' name="startTime" value=depart.startTime)
+          .control-group
+            label.control-label 终止时间:
+            .controls
+              input#end.datetimepicker.m-wrap.medium(type='text' name="depart[end]" value=depart.end data-link-field="endTime" data-link-format="yymmddhh0000")
+              input#endTime(type='hidden' name="endTime" value=depart.endTime)
+          input#hidden_id(type="hidden" name="depart_id" value=depart._id)
+
+      .modal-footer
+        .btn(data-dismiss='modal') 取消
+        .btn.blue(onclick="copyCard();") 复制卡
+        .btn.blue(onclick="makeCard();") 发新卡

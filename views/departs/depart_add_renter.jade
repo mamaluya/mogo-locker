@@ -1,0 +1,110 @@
+﻿extends ../layout
+
+block content
+  body(class="#{me.settings.layoutOption == 'boxed' ? 'page-boxed ' : ''}#{me.settings.headerOption == 'fixed' ? 'page-header-fixed ' : ''}#{me.settings.sidebarOption == 'fixed' ? 'page-sidebar-fixed ' : ''}#{me.settings.footerOption == 'fixed' ? 'page-footer-fixed ' : ''}#{me.settings.sidebar ? me.settings.sidebar : ''}")
+    // BEGIN HEADER
+    include ../body-header
+    // END HEADER
+    // BEGIN CONTAINER
+    if me.settings.layoutOption == 'boxed'
+      .container
+        .page-container.row-fluid
+          // BEGIN SIDEBAR
+          include ../body-sidebar
+          // END SIDEBAR
+          // BEGIN PAGE
+          include depart_add_renter_content
+          // END PAGE
+        // END CONTAINER
+        include ../body-footer
+    else
+      .page-container.row-fluid
+        // BEGIN SIDEBAR
+        include ../body-sidebar
+        // END SIDEBAR
+        // BEGIN PAGE
+        include depart_add_renter_content
+        // END PAGE
+      // END CONTAINER
+      // BEGIN FOOTER
+      include ../body-footer
+      // END FOOTER
+    // BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time)
+    script(src='../javascript/app.js')
+    script(src='../javascript/jquery-form.js')
+    script(src='../javascript/avalidate.js')
+    script(src='../javascript/bootstrap-autocomplete.js')
+    script.
+      jQuery(document).ready(function () {
+        // initiate layout and plugins
+        App.init();
+
+        // 模糊查询
+        $('#autocompleteInput').autocomplete({
+          source: function (query, process) {
+            if ($.trim(query) == "") return;
+            $("#autocompleteInput").removeAttr("real-value");
+            $.post("/renters/searchRenter", {"matchInfo": $.trim(query), "matchCount": 8}, function (respData) {
+              return process(respData);
+            });
+          },
+          formatItem: function (item) {
+            return item["nickname"];
+          },
+          setValue: function (item) {
+            return {'data-value': item["nickname"], 'real-value': item["_id"]};
+          }
+        });
+
+        $("#register_btn").on("click", function (e) {
+          if ($("#autocompleteInput").attr("real-value") == null || $("#autocompleteInput").val().trim() == "") {
+            toastr.info("请检索并指定一名用户");
+            return;
+          }
+          $("#hidden_renter").val($("#autocompleteInput").attr("real-value"));
+          var options = {
+            success: function (data) {
+              if(data.result == "success") {
+                toastr.success("用户入住操作成功");
+                setTimeout(function () {
+                  window.location.href = "/departs/renters?depart_id=" + data.msg;
+                }, 1000);
+              }else{
+                toastr.warning(data.msg);
+              }
+            },
+            error: function (data) {
+              toastr.error("未知错误, 请重新操作");
+              console.error(data);
+            }
+          }
+          $("#register_form").ajaxSubmit(options);
+        });
+
+        V.init({
+          area: "#new_form",
+          btn: "#new_btn",
+          tip: function (e, msg) {
+            toastr.warning(msg);
+          },
+          success: function (form, formData) {
+            var options = {
+              success: function (data) {
+                if(data.result == "success"){
+                  toastr.success("用户入住操作成功");
+                  setTimeout(function () {
+                    window.location.href = "/departs/renters?depart_id=" + data.msg;
+                  }, 1000);
+                }else{
+                  toastr.warning(data.msg);
+                }
+              },
+              error: function (data) {
+                toastr.error("未知错误, 请重新操作");
+              }
+            }
+            $("#new_form").ajaxSubmit(options);
+          }
+        });
+      });
+    // END JAVASCRIPTS

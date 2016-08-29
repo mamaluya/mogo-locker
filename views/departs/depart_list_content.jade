@@ -1,0 +1,46 @@
+.page-content
+  // BEGIN PAGE CONTAINER
+  .container-fluid
+    // BEGIN PAGE HEADER
+    .row-fluid
+      .span12
+        // BEGIN PAGE TITLE & BREADCRUMB
+          h3.page-title
+            | 公寓管理
+            small --公寓一览
+        // END PAGE TITLE & BREADCRUMB
+        .portlet.box(class="#{me.settings.color}")
+          .portlet-title
+            .caption
+              i.icon-reorder
+              | 公寓检索
+          .portlet-body
+            .row-fluid
+              form(action="/departs/list" method="get")
+                .controls.controls-row
+                  select#building_select.span2.m-wrap.no-left-margin(name='building_num' onchange="changeBuilding();")
+                    each building in buildings
+                      option(value="#{building.building_num}") #{building.building_num}号楼
+                  select#floor_select.span2.m-wrap.no-left-margin(name='floor_num')
+                    each floor in floors
+                      option(value="#{floor}") #{floor} 层
+                  input#room_num.span2.m-wrap.no-left-margin(type="text" name='room_num' placeholder='房间号')
+                  input#hidden_building_num(type="hidden" value="#{building_num}")
+                  input#hidden_floor_num(type="hidden" value="#{floor_num}")
+                  input#hidden_room_num(type="hidden" value="#{room_num?room_num:''}")
+                  button.btn.no-left-margin 检索
+                .form-section.no-margin
+            .row-fluid
+              .tiles
+                each depart in departs
+                  .tile(id="tile_#{depart._id}" class="#{depart.renters.length?'bg-green':'bg-grey'}")
+                    .tile-body
+                      i.icon-home
+                    .tile-object
+                      .room #{depart.building_num} - #{depart.room_num}
+                      if depart.renters.length
+                        .number #{depart.renters.length} 人
+                    input(name="_id" value=depart._id)
+                    input(name="renters" value=depart.renters.length)
+                    input(name="switch" value=depart.switch)
+                    input(name="electric_code" value=depart.electric_code)
