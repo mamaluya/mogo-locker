@@ -16,7 +16,7 @@ function sendSMS(mobile, tpl_id, tpl_value, callback) {
     res.setEncoding('utf8');
     res.on('data', function (data) {
       console.log('BODY:' + data);
-      callback(data);
+      callback(JSON.parse(data));
     });
     res.on('end', function () {
       console.log('No more data in response.');
