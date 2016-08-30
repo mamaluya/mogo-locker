@@ -1,6 +1,6 @@
 {
-  "name": "unirocker",
-  "version": "0.0.0",
+  "name": "mogo-locker",
+  "version": "1.9.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
