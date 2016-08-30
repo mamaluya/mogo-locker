@@ -1,5 +1,5 @@
 # mogo
 share project to aliyun
 
-usage
+# usage
 npm install
