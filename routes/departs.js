@@ -567,16 +567,18 @@ router.post("/sendPassword", function (req, res, next) {
       for (var i = 0; i < depart.renters.length; i++) {
         if (depart.renters[i].phone == phone) {
           try {
-            // 正式上线后 解除注释
-            /* var password = PasswordUtil.getTempPassword(depart);
-             SMSUtil.sendSMS(phone, 17516, "#pwd#=" + password, function (data) {
-             if (data.error_code == 0) {
-             res.json({result: "success"});
-             } else {
-             res.json({result: "fail", msg: data.reason});
-             }
-             });*/
-            res.json({result: "success"});
+            if (config.sms.switch) { //短信通道开关
+              var password = PasswordUtil.getTempPassword(depart);
+              SMSUtil.sendSMS(phone, 17516, "#pwd#=" + password, function (data) {
+                if (data.error_code == 0) {
+                  res.json({result: "success"});
+                } else {
+                  res.json({result: "fail", msg: data.reason});
+                }
+              });
+            } else {
+              res.json({result: "fail", msg: "短信通道未开放"});
+            }
           } catch (e) {
             res.json({result: "fail", msg: "短信平台服务器异常, 请稍候重试"});
           }
@@ -587,16 +589,18 @@ router.post("/sendPassword", function (req, res, next) {
       if (flag == false) {
         if (req.session.me.phone == phone && depart.renters.length == 0) {
           try {
-            // 正式上线后 解除注释
-            /* var password = PasswordUtil.getTempPassword(depart);
-             SMSUtil.sendSMS(phone, 17516, "#pwd#=" + password, function (data) {
-             if (data.error_code == 0) {
-             res.json({result: "success"});
-             } else {
-             res.json({result: "fail", msg: data.reason});
-             }
-             });*/
-            res.json({result: "success"});
+            if (config.sms.switch) {
+              var password = PasswordUtil.getTempPassword(depart);
+              SMSUtil.sendSMS(phone, 17516, "#pwd#=" + password, function (data) {
+                if (data.error_code == 0) {
+                  res.json({result: "success"});
+                } else {
+                  res.json({result: "fail", msg: data.reason});
+                }
+              });
+            } else {
+              res.json({result: "fail", msg: "短信通道未开放"});
+            }
           } catch (e) {
             res.json({result: "fail", msg: "短信平台服务器异常, 请稍候重试"});
           }
