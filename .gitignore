@@ -37,6 +37,8 @@ jspm_packages
 .node_repl_history
 
 # IDE Related
-..svn
 .idea
+config.js
+test.js
 unirocker.iml
+
