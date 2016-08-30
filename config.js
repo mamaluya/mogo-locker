@@ -1,6 +1,6 @@
 var config = {
   db: {
-    url: "mongodb://localhost/test"
+    url: "mongodb://localhost/mogo-locker"
   },
 
   // 抄表 参数配置中不要出现 00
