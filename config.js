@@ -5,6 +5,7 @@ var config = {
 
   // 抄表 参数配置中不要出现 00
   record: {
+    switch: 0,
     hour: 20,
     minute: 01
     //second: 01
@@ -13,14 +14,16 @@ var config = {
 
   // 欠费短信提醒 参数配置中不要出现 00
   balance: {
-    hour: 17,
-    minute: 37
+    switch: 0,
+    hour: 18,
+    minute: 44
     //second: 00,
     //dayOfMonth: 1
   },
 
   // 每月帐单 参数配置中不要出现 00
   bill: {
+    switch: 0,
     hour: 17,
     minute: 31
     //second: 00,
@@ -39,6 +42,7 @@ var config = {
   },
 
   sms: {
+    switch: 1,
     pwd: 17516,
     bill: 17465,
     balance: 17464
