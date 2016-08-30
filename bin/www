@@ -9,9 +9,10 @@ var debug = require('debug')('unirocker:server');
 var http = require('http');
 var RateUtil = require('../common/RateUtil');
 var InterfaceUtil = require('../common/InterfaceUtil');
-var Scheduler = require("../common/Scheduler");
+var RecordScheduler = require("../common/Scheduler");
 var BalanceScheduler = require("../common/BalanceScheduler");
 var BillScheduler = require("../common/BillScheduler");
+var config = require("../config");
 
 /**
  * Get port from environment and store in Express.
@@ -36,16 +37,14 @@ RateUtil.init();
  * Initialize certificate task (water)
  */
 
-//InterfaceUtil.init();
-certificate = "3277CA3AF00B43799A364D64D5DC9F69";
+InterfaceUtil.init();
 
 /**
  * Initialize interval task (water & electric)
  */
-
-//Scheduler.init();
-BalanceScheduler.init();
-//BillScheduler.init();
+if (config.record.switch) RecordScheduler.init();
+if (config.balance.switch) BalanceScheduler.init();
+if (config.bill.switch) BillScheduler.init();
 
 /**
  * Listen on provided port, on all network interfaces.
