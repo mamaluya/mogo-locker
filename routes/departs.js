@@ -589,8 +589,8 @@ router.post("/sendPassword", function (req, res, next) {
       if (flag == false) {
         if (req.session.me.phone == phone && depart.renters.length == 0) {
           try {
+            var password = PasswordUtil.getTempPassword(depart);
             if (config.sms.switch) {
-              var password = PasswordUtil.getTempPassword(depart);
               SMSUtil.sendSMS(phone, 17516, "#pwd#=" + password, function (data) {
                 if (data.error_code == 0) {
                   res.json({result: "success"});
@@ -599,7 +599,7 @@ router.post("/sendPassword", function (req, res, next) {
                 }
               });
             } else {
-              res.json({result: "fail", msg: "短信通道未开放"});
+              res.json({result: "fail", msg: "短信通道未开放", pwd: password});
             }
           } catch (e) {
             res.json({result: "fail", msg: "短信平台服务器异常, 请稍候重试"});
@@ -643,7 +643,7 @@ router.post("/copyCard", function (req, res, next) {
   var depart_id = req.body.depart_id;
   Departs.findOne({_id: depart_id}, function (err, depart_) {
     if (err) throw err;
-    if (depart_.start == "" || depart_.startTime == "") {
+    if (!depart_.start || !depart_.startTime) {
       res.json({result: "fail", msg: "初次发卡, 请选择发新卡"});
     } else {
       var code = {

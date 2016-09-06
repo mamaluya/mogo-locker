@@ -313,7 +313,7 @@ block content
               toastr.success("身份验证通过，已成功发送密码");
               $("#temp_pwd_modal").modal("hide");
             } else {
-              toastr.error(data.msg);
+              toastr.error(data.msg + data.pwd);
             }
           },
           error: function (data) {

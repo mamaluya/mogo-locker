@@ -42,7 +42,7 @@ var config = {
   },
 
   sms: {
-    switch: 1,
+    switch: 0,
     pwd: 17516,
     bill: 17465,
     balance: 17464
