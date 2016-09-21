@@ -15,14 +15,15 @@
               i.icon-reorder
               | #{depart.building_num}号楼#{depart.room_num}室
           .portlet-body
-            .tabbable.portlet-tabs
-              ul.nav.nav-tabs
-                li
-                  a(href='#portlet_tab2', data-toggle='tab') 已注册用户
+            .tabbable.tabbable-custom.tabs-left
+              // Only required for left/right tabs
+              ul.nav.nav-tabs.tabs-left
                 li.active
-                  a(href='#portlet_tab1', data-toggle='tab') 未注册用户
+                  a(href='#tab_1', data-toggle='tab') 已注册用户
+                li
+                  a(href='#tab_2', data-toggle='tab') 未注册用户
               .tab-content
-                #portlet_tab2.tab-pane
+                #tab_1.tab-pane.active(style='min-height: 456px;')
                   form#register_form.form.form-horizontal(action='/departs/doCheckIn' method='post')
                     .control-group
                       label.control-label 电话:
@@ -39,7 +40,7 @@
                     input(type="hidden" name="depart[_id]" value=depart._id)
                     input(type="hidden" name="water_val" value=water_val)
                     input(type="hidden" name="electric_val" value=electric_val)
-                #portlet_tab1.tab-pane.active
+                #tab_2.tab-pane(style='min-height: 124px;')
                   form#new_form.form.form-horizontal(action='/departs/doCheckIn' method='post')
                     .control-group
                       label.control-label 姓名:

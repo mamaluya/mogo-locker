@@ -15,14 +15,15 @@
               i.icon-reorder
               | #{depart.building_num}号楼#{depart.room_num}室
           .portlet-body
-            .tabbable.portlet-tabs
-              ul.nav.nav-tabs
-                li
-                  a(href='#portlet_tab2', data-toggle='tab') 电费
+            .tabbable.tabbable-custom.tabs-left
+              // Only required for left/right tabs
+              ul.nav.nav-tabs.tabs-left
                 li.active
-                  a(href='#portlet_tab1', data-toggle='tab') 水费
+                  a(href='#tab_1', data-toggle='tab') 水费
+                li
+                  a(href='#tab_2', data-toggle='tab') 电费
               .tab-content
-                #portlet_tab1.tab-pane.active
+                #tab_1.tab-pane.active(style='min-height: 124px;')
                   .row-fluid
                     form
                       .controls.controls-row
@@ -34,7 +35,7 @@
 
                   .row-fluid(style="text-align: center;")
                     span#water_summary
-                #portlet_tab2.tab-pane
+                #tab_2.tab-pane(style='min-height: 124px;')
                   .row-fluid
                     form
                       .controls.controls-row
