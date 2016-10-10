@@ -43,11 +43,11 @@ block content
 
         $('.datetimepicker').datetimepicker({
           language: 'zh-CN',
-          format: 'yyyy-mm-dd',
+          format: 'yyyy-mm',
           autoclose: true,
-          startView: 2,
+          startView: 3,
           maxView: 4,
-          minView: 2
+          minView: 3
         });
 
         $("#recharge_btn").on("click", function(e){
@@ -111,7 +111,11 @@ block content
               end: end
             },
             success: function(data){
-              $("tbody").empty().append(data);
+              if (data.length){
+                $("#recharge_tbody").empty().append(data);
+              }else{
+                toastr.info("没有相关的充值记录");
+              }
             },
             error: function (data) {
               toastr.error("未知错误, 请重新操作");

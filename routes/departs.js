@@ -565,12 +565,10 @@ router.post('/rechargeHistory', function (req, res, next) {
   var depart_id = req.body.depart_id;
   var start = req.body.start;
   var end = req.body.end;
-  var filter = {
-    depart: depart_id,
-    time: {$gt: start},
-    time: {$lt: end}
-  }
-  Recharge.where(filter)
+  Recharge.find({depart: depart_id})
+    .where("time")
+    .gt(start)
+    .lt(end)
     .sort({time: -1})
     .exec(function (err, rechargeList) {
       if (err) throw err;

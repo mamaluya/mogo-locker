@@ -15,14 +15,15 @@
               i.icon-reorder
               | #{depart.building_num}号楼#{depart.room_num}室
           .portlet-body
-            .tabbable.portlet-tabs
-              ul.nav.nav-tabs
-                li
-                  a(href='#portlet_tab2', data-toggle='tab') 充值记录
+            .tabbable.tabbable-custom.tabs-left
+              // Only required for left/right tabs
+              ul.nav.nav-tabs.tabs-left
                 li.active
-                  a(href='#portlet_tab1', data-toggle='tab') 充值
+                  a(href='#tab1', data-toggle='tab') 充值
+                li
+                  a(href='#tab2', data-toggle='tab') 充值记录
               .tab-content
-                #portlet_tab1.tab-pane.active
+                #tab1.tab-pane.active
                   form#recharge_form.form.form-horizontal
                     .control-group
                       label.control-label 帐户余额:
@@ -46,7 +47,7 @@
                     input#hidden_id(type="hidden" value="#{depart._id}")
                     input#hidden_building_num(type="hidden" value="#{depart.building_num}")
                     input#hidden_floor_num(type="hidden" value="#{depart.floor_num}")
-                #portlet_tab2.tab-pane
+                #tab2.tab-pane(style="min-height: 192px;")
                   .row-fluid
                     .controls.controls-row
                       input#start.span2.m-wrap.no-left-margin.datetimepicker(type="text" placeholder='起始时间')
@@ -60,7 +61,7 @@
                           th 充值金额
                           th 充值时间
                           th 备注
-                      tbody
+                      tbody#recharge_tbody
 
     // END PAGE HEADER
   // END PAGE CONTAINER
