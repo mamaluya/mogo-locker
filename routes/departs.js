@@ -527,7 +527,31 @@ router.post("/doRecharge", function (req, res, next) {
       if (err) throw err;
       if (depart_.balance + money > 0) {
         //此处加入开闸送电操作
-        // 送电代码 上线时加入
+        var flag = false;
+        var url = config.urls.switch + querystring.stringify({open_close: 1, uuid: depart_.electric_code});
+        http.get(url, function (chunks) {
+          chunks.on('data', function (data) {
+            if (data == "提交成功") {
+              flag = true;
+            }
+          }).on('end', function () {
+            if (flag == true) {
+              depart_.update({switch: 1}, function (err, result) {
+                if (err) throw err;
+                res.json({result: "success"});
+              });
+            } else {
+              res.json({result: "fail", msg: "送电操作失败"});
+            }
+          }).on('error', function (e) {
+            LogUtil.record({
+              title: "电表服务器异常",
+              content: e.message,
+              type: "送电操作失败"
+            });
+            res.json({result: "fail", msg: "电表服务器异常, 送电操作失败"});
+          });
+        });
         res.json({result: "success", msg: depart_.balance + parseFloat(money)});
       } else {
         res.json({result: "fail", msg: "您仍欠费:" + (depart_.balance + parseFloat(money)) + "元"});
