@@ -24,24 +24,22 @@
                   a(href='#tab_2', data-toggle='tab') 电费
               .tab-content
                 #tab_1.tab-pane.active(style='min-height: 124px;')
-                  .row-fluid
-                    form
-                      .controls.controls-row
-                        input#key_water.datetimepicker.span2.m-wrap(type="text" name="keyword")
-                        button.btn.no-left-margin(type="button" onclick="getBills('water');") 检索
-                      .form-section.no-margin
+                  form
+                    .controls.controls-row
+                      input#key_water.datetimepicker.span2.m-wrap(type="text" name="keyword" placeholder="查询日期")
+                      button.btn.no-left-margin(type="button" onclick="getBills('water');") 检索
+                    .form-section.no-margin
                   .row-fluid
                     #water_chart
 
                   .row-fluid(style="text-align: center;")
                     span#water_summary
                 #tab_2.tab-pane(style='min-height: 124px;')
-                  .row-fluid
-                    form
-                      .controls.controls-row
-                        input#key_electric.datetimepicker.span2.m-wrap(type="text" name="keyword")
-                        button.btn.no-left-margin(type="button" onclick="getBills('electric');") 检索
-                      .form-section.no-margin
+                  form
+                    .controls.controls-row
+                      input#key_electric.datetimepicker.span2.m-wrap(type="text" name="keyword")
+                      button.btn.no-left-margin(type="button" onclick="getBills('electric');") 检索
+                    .form-section.no-margin
                   .row-fluid
                     #electric_chart
 

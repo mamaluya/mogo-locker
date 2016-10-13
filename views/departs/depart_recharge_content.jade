@@ -48,20 +48,18 @@
                     input#hidden_building_num(type="hidden" value="#{depart.building_num}")
                     input#hidden_floor_num(type="hidden" value="#{depart.floor_num}")
                 #tab2.tab-pane(style="min-height: 192px;")
-                  .row-fluid
-                    .controls.controls-row
-                      input#start.span2.m-wrap.no-left-margin.datetimepicker(type="text" placeholder='起始时间')
-                      input#end.span2.m-wrap.no-left-margin.datetimepicker(type="text" placeholder='终止时间')
-                      #history_btn.btn.no-left-margin 检索
-                  .row-fluid
-                    table.table.table-hover
-                      thead
-                        tr
-                          th #
-                          th 充值金额
-                          th 充值时间
-                          th 备注
-                      tbody#recharge_tbody
+                  .controls.controls-row
+                    input#start.span2.m-wrap.no-left-margin.datetimepicker(type="text" placeholder='起始时间')
+                    input#end.span2.m-wrap.no-left-margin.datetimepicker(type="text" placeholder='终止时间')
+                    #history_btn.btn.no-left-margin 检索
+                  table.table.table-hover
+                    thead
+                      tr
+                        th #
+                        th 充值金额
+                        th 充值时间
+                        th 备注
+                    tbody#recharge_tbody
 
     // END PAGE HEADER
   // END PAGE CONTAINER
