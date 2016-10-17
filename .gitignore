@@ -41,5 +41,5 @@ jspm_packages
 config.js
 test.js
 unirocker.iml
-bin/www
+bin/*.*
 
