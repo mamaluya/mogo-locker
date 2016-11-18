@@ -14,6 +14,7 @@ var login = require('./routes/login');
 var departs = require('./routes/departs');
 var renters = require('./routes/renters');
 var settings = require('./routes/settings');
+var mobile = require('./routes/mobile');
 
 var app = express();
 
@@ -46,6 +47,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', login);
+app.use("/mobile", mobile);
 app.use(function(req, res, next){
   if (req.session.me) {
     app.locals.me = req.session.me;
