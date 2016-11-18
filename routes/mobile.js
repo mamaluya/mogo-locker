@@ -12,7 +12,7 @@ router.get('/', function (req, res, next) {
 router.post('/verifyPhone', function (req, res, next) {
     var phone = req.body.phone;
     var password = req.body.password;
-    var filter = {phone: phone, ID_card: password};
+    var filter = {phone: phone, ID_Card: password};
     Renters.findOne(filter, function (err, renter) {
         if (renter) {
             res.json({result: "success"});
