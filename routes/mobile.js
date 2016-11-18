@@ -10,9 +10,9 @@ router.get('/', function (req, res, next) {
 
 /* 验证登录信息. */
 router.post('/verifyPhone', function (req, res, next) {
-    var phone = req.body.username;
-    var ID_card = req.body.password;
-    var filter = {phone: phone, password: ID_card};
+    var phone = req.body.phone;
+    var password = req.body.password;
+    var filter = {phone: phone, ID_card: password};
     Renters.findOne(filter, function (err, renter) {
         if (renter) {
             res.json({result: "success"});
