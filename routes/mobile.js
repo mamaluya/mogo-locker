@@ -19,7 +19,7 @@ router.post('/verifyPhone', function (req, res, next) {
 
 /* 退出登录. */
 router.get('/roomList', function (req, res, next) {
-    var phone = req.body.phone;
+    var phone = req.query.phone;
     var filter = {phone: phone};
     Renters.findOne(filter)
         .populate({path: "departs"})
