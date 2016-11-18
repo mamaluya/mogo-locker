@@ -24,10 +24,11 @@ router.get('/roomList', function (req, res, next) {
     Renters.findOne(filter)
         .populate({path: "departs"})
         .exec(function (err, renter) {
-            if (renter) {
-                res.json({rooms: renter.departs});
+            console.log(renter);
+            if (renter && renter.departs.length > 0) {
+                res.json({array: renter.departs});
             } else {
-                res.json({rooms: []});
+                res.json({array: []});
             }
         });
 });
